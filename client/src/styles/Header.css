@@ -11,4 +11,8 @@
     position: absolute;
     right: 0;
 }
+.header .titleLogo{
+    font-size: 3.2vw;
+    color: black;
 
+}

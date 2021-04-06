@@ -1,0 +1,10 @@
+.home .contenedorHome{
+    background-color: white;
+    border-radius: 5px;
+}
+
+.home h2{
+    font-size: 3.0vw;
+    text-align: center;
+    color: black;
+}

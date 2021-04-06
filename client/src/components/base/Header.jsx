@@ -6,8 +6,8 @@ const Header = () => {
     return (
         <div className="header">
             <Navbar expand="lg">
-                <Navbar.Brand href="/"><img src="../../public/logo.svg" alt="logo" /></Navbar.Brand>
-                <Navbar.Text class="titleLogo"><h1>G-Cosmetics</h1></Navbar.Text>
+                <Navbar.Brand href="/"><img src="https://github.com/samuVillegas/software-geek-cosmetics/blob/main/client/public/logo.svg?raw=true" alt="logo" /></Navbar.Brand>
+                <Navbar.Text ><h1 className="titleLogo">G-Cosmetics</h1></Navbar.Text>
             </Navbar>
         </div>
     )
