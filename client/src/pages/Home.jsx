@@ -1,11 +1,30 @@
-import React from 'react';
+import React ,{useEffect,useState}from 'react';
 import Header from '../components/base/Header'
 import Footer from '../components/base/Footer'
 import { Container,Row,Col,Button} from 'react-bootstrap';
 import MakePurchase from '../components/MakePurchase'
 import '../styles/Home.css'
 
+
+
 const Home = () => {
+    const[listProducts,setListProducts] = useState([]);
+
+    useEffect(() => {
+        convertProductsJson();
+    }, []);
+
+
+    async function convertProductsJson(){
+        await fetch('http://localhost:8085/api/getProducts',{method:'GET',mode:'cors'})
+        .then(response=>{
+            return response.json();
+        }).then(response=>{
+            setListProducts(Object.values(response));
+        })
+    }
+    
+
     return (
         <div className="home" >
             <Header/>
@@ -19,7 +38,7 @@ const Home = () => {
                 </Row>
                 <Row>
                     <Col>
-                    <MakePurchase/>
+                    <MakePurchase listProducts={listProducts} />
                     </Col>
                 
                 </Row>
