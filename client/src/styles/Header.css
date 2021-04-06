@@ -1,0 +1,14 @@
+.header{
+    padding: 0.5vw;
+    margin-bottom: 2vw;
+    border-bottom: 3px solid #F85931;
+    background: #CE1836;
+}
+.header img{
+    height: 4vw;
+}
+.header .nav{
+    position: absolute;
+    right: 0;
+}
+

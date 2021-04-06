@@ -1,0 +1,10 @@
+.footer{
+    padding: 1vw;
+    border-top: 3px solid #F85931;
+    margin-top: 2vw;
+    background: #CE1836;
+}
+
+.footer p{
+    text-align: center;
+}
