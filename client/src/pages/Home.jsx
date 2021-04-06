@@ -1,7 +1,8 @@
 import React from 'react';
 import Header from '../components/base/Header'
 import Footer from '../components/base/Footer'
-import { Container } from 'react-bootstrap';
+import { Container,Row,Col,Button} from 'react-bootstrap';
+import MakePurchase from '../components/MakePurchase'
 import '../styles/Home.css'
 
 const Home = () => {
@@ -9,8 +10,21 @@ const Home = () => {
         <div className="home" >
             <Header/>
             <h2>Samuel David Villegas Bedoya</h2>
-            <div className="text-center mt-2 mx-auto my-5 p-5 bosy w-75 contenedorHome">
-            </div>
+            <Container className="text-center mt-2 mx-auto my-1 p-5 bosy">
+                <Row>
+                    <Col></Col>
+                    <Col><Button className="buttonHome">Realizar compra</Button>{' '}</Col>
+                    <Col><Button className="buttonHome">Total compras</Button>{' '}</Col>
+                    <Col></Col>
+                </Row>
+                <Row>
+                    <Col>
+                    <MakePurchase/>
+                    </Col>
+                
+                </Row>
+            </Container>
+            
             <Footer/>        
         </div>
     )

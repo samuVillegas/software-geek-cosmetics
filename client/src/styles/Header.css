@@ -14,5 +14,6 @@
 .header .titleLogo{
     font-size: 3.2vw;
     color: black;
-
+    background-color: #F85931;
+    border-radius: 1rem;
 }

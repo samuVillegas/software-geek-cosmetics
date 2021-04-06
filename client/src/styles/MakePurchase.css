@@ -1,0 +1,27 @@
+.makePurchase .containerMake{
+    background-color: white;
+    border-radius: 5px;
+}
+
+.buttonMake{
+    background-color: #F85931;
+    color: black;
+}
+
+.buttonMake:hover{
+    background-color: #CE1836;
+    color: white;
+}
+
+.buttonMake:focus{
+    background-color: #CE1836;
+}
+
+.inputMake{
+    border: 2px solid #F85931;
+    border-radius: 10px;
+}
+
+.inputMake:focus{
+    border: 2px solid #CE1836;
+}
