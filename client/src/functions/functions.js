@@ -15,6 +15,9 @@ module.exports = {
         if (hours < 10) hours = "0" + hours;
         if (minutes < 10) minutes = "0" + minutes;
         return year + "/" + month + "/" + day+ " "+ hours + ":" + minutes;
+    },
+    getEndPoint:()=>{
+        return 'http://localhost:8085/api/';
     }
     
 }

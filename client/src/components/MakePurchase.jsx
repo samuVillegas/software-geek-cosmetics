@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Form, Table } from 'react-bootstrap';
 import '../styles/MakePurchase.css'
 import {generatorDate} from '../functions/functions'
-
+import {getEndPoint} from '../functions/functions';
 const MakePurchase = () => {
     const [listProducts,setListProducts] = useState([]);
     const [listProductsClient, setListProductsClient] = useState([]);
@@ -28,7 +28,7 @@ const MakePurchase = () => {
     }, []);
     
     const convertProductsJson = async()=>{
-        await fetch('http://localhost:8085/api/getProducts',{method:'GET',mode:'cors'})
+        await fetch(`${getEndPoint()}getProducts`,{method:'GET',mode:'cors'})
         .then(response=>{
             return response.json();
         }).then(response=>{
@@ -160,7 +160,7 @@ const MakePurchase = () => {
                 NameUser:document.getElementById('nameUserAdd').value,
                 Total:total
             }
-            await fetch('http://localhost:8085/api/createSale',{
+            await fetch(`${getEndPoint()}createSale`,{
                 headers:{
                     'Content-Type': 'application/json'
                 },

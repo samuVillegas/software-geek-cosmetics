@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { Container, Row, Col, Button, Form,Table } from 'react-bootstrap';
 import '../styles/ShowOrders.css'
-
+import {getEndPoint} from '../functions/functions';
 const ShowSales = () => {
     const[listSales,setListSales] = useState([]);
 
@@ -10,7 +10,7 @@ const ShowSales = () => {
     }, []);
 
     async function convertSalesJson(){
-        await fetch('http://localhost:8085/api/getSales',{method:'GET',mode:'cors'})
+        await fetch(`${getEndPoint()}getSales`,{method:'GET',mode:'cors'})
         .then(response=>{
             return response.json();
         }).then(response=>{

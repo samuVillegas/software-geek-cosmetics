@@ -5,17 +5,19 @@ import { Container,Row,Col,Button} from 'react-bootstrap';
 import MakePurchase from '../components/MakePurchase'
 import ShowSales from '../components/ShowSales';
 import '../styles/Home.css';
+import {getEndPoint} from '../functions/functions';
 
 
 
 const Home = () => {
     const[option,setOption] = useState(0);
     useEffect(() => {
+        console.log(getEndPoint())
        saveProducts();
     }, []);
 
     const saveProducts = async()=>{
-        await fetch('http://localhost:8085/api/saveProducts',{method:'GET',mode:'cors'})
+        await fetch(`${getEndPoint()}saveProducts`,{method:'GET',mode:'cors'})
         .then(response=>{
             return response.json();
         }).then(response=>{
