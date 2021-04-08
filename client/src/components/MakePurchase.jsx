@@ -3,7 +3,8 @@ import { Container, Row, Col, Button, Form, Table } from 'react-bootstrap';
 import '../styles/MakePurchase.css'
 import {generatorDate} from '../functions/functions'
 
-const MakePurchase = (props) => {
+const MakePurchase = () => {
+    const [listProducts,setListProducts] = useState([]);
     const [listProductsClient, setListProductsClient] = useState([]);
     const [objProductsClient, setObjProductsClient] = useState({})
     const [productsSetClient, setProductsSetClient] = useState(new Set());
@@ -15,36 +16,45 @@ const MakePurchase = (props) => {
     const [totalIVA,setTotalIVA] = useState(0);
     const [total,setTotal] = useState(0);
     const [date,setDate] = useState('');
-    const [numberOrder,setNumberOrder] = useState(0); 
+    const [numberSale,setNumberSale] = useState(0); 
 
 
     useEffect(() => {
+        convertProductsJson();
         setInterval(()=>{
             setDate(generatorDate());
         },60)
-        setNumberOrder(Math.floor(Math.random()*999999)+100000)
+        setNumberSale(Math.floor(Math.random()*999999)+1)
     }, []);
+    
+    const convertProductsJson = async()=>{
+        await fetch('http://localhost:8085/api/getProducts',{method:'GET',mode:'cors'})
+        .then(response=>{
+            return response.json();
+        }).then(response=>{
+            setListProducts(Object.values(response.message));
+        })
+    }
+    
 
     const addProduct = () => {
         const nameUser = document.getElementById('nameUserAdd');
+
         if (nameUser.value !== '') {
+
             const name = document.getElementById('productAdd').value;
+
             if (name !== 'Articulo' && !productsSetClient.has(name)) {
+
                 const quantity = parseInt(document.getElementById('quantityAdd').value);
+                
                 if (!isNaN(quantity)) {
                     if(quantity<=existenceProduct){
                         //Evita que el usuario coloque otro nombre diferente
                         nameUser.disabled = true;
 
-                        //Sumamos al subTotal total
-                        const subTotalAllProductsAux = subTotalAllProducts+subTotalProduct;
-                        setSubTotalAllProducts(subTotalAllProductsAux);
-                        //Calcularmos el totalIVA
-                        const totalIVAAux = subTotalAllProductsAux*0.19
-                        setTotalIVA(totalIVAAux);
-                        //Calculamos el total
-                        const totalAux = totalIVAAux + subTotalAllProductsAux
-                        setTotal(totalAux);
+                        //Realizamos las operaciones para el subtotal general (suma)
+                        operations(subTotalProduct,true);
 
                         //Formamos el objeto para agregarlo a la lista de productos del cliente
                         const objProductsClientAux = objProductsClient;
@@ -88,15 +98,8 @@ const MakePurchase = (props) => {
         const productsSetClientAux = productsSetClient;
         productsSetClient.delete(name);
 
-        //Restamos al subTotal total
-        const subTotalAllProductsAux = subTotalAllProducts-subTotal;
-        setSubTotalAllProducts(subTotalAllProductsAux);
-        //Calcularmos el totalIVA
-        const totalIVAAux = subTotalAllProductsAux*0.19
-        setTotalIVA(totalIVAAux);
-        //Calculamos el total
-        const totalAux = totalIVAAux + subTotalAllProductsAux
-        setTotal(totalAux);
+        //Realizamos las operaciones para el subtotal general (resta)
+        operations(subTotal,false);
 
         setProductsSetClient(productsSetClientAux)
         setObjProductsClient(objProductsClientAux);
@@ -106,7 +109,7 @@ const MakePurchase = (props) => {
     const onChangeFields = (e) => {
         if(e.target.id === 'productAdd'){
             if(e.target.value!='Articulo'){
-                const result = props.listProducts.filter(item=>item.descripcion === e.target.value);
+                const result = listProducts.filter(item=>item.descripcion === e.target.value);
                 if(result.length!=0){
                     setExistenceProduct(parseInt(result[0].existencia));
                     setPriceProduct(result[0].precio);
@@ -131,6 +134,66 @@ const MakePurchase = (props) => {
         }
     }
 
+    const operations = (subTotalParam,type)=>{
+        var subTotalAllProductsAux = 0;
+
+        if(type)subTotalAllProductsAux=subTotalAllProducts+subTotalParam;
+        else subTotalAllProductsAux=subTotalAllProducts-subTotalParam;
+
+        setSubTotalAllProducts(subTotalAllProductsAux);
+        const totalIVAAux = subTotalAllProductsAux*0.19
+        setTotalIVA(totalIVAAux);
+        const totalAux = totalIVAAux + subTotalAllProductsAux
+        setTotal(totalAux);
+    }   
+
+    const sendSale = async () =>{
+
+        if(total!==0){
+            const dateAux = date.split(' ')[0].split('/');
+            const timeAux = date.split(' ')[1].split(':');
+            const data = {
+                NumberSale:numberSale,
+                SubTotal:subTotalAllProducts,
+                TotalIVA:totalIVA,
+                CreationDate:parseInt(dateAux[0]+dateAux[1]+dateAux[2]+timeAux[0]+timeAux[1]+'00'),
+                NameUser:document.getElementById('nameUserAdd').value,
+                Total:total
+            }
+            await fetch('http://localhost:8085/api/createSale',{
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                method:'POST',
+                mode:'cors',
+                body:JSON.stringify(data)
+            })
+            .then(response=>{
+                return response.json();
+            }).then(response=>{
+                if(response.message==='SUCCESSFUL_CREATION_ORDER'){
+                    alert('SUCCESSFUL_CREATION_ORDER');
+                    resetForm();
+                }
+                else if(response==='SERVER_ERROR')alert('SERVER_ERROR')
+            })
+        }else{
+            alert('Ingrese almenos un producto')
+        }
+        
+    }
+
+    const resetForm= ()=>{
+        document.getElementById('formAdd').reset();
+        setListProductsClient([]);
+        setObjProductsClient({});
+        setProductsSetClient(new Set());
+        setSubTotalAllProducts(0)
+        setTotalIVA(0)
+        setTotal(0)
+        setNumberSale(Math.floor(Math.random()*999999)+1)
+        document.getElementById('nameUserAdd').disabled = false;
+    } 
 
     return (
         <div className="makePurchase" >
@@ -139,7 +202,7 @@ const MakePurchase = (props) => {
                     <Col sm={6}> <div className="text-center mt-1 mx-auto my-1 p-5 bosy w-100 containerMake">
                         <Form id='formAdd'>
                             <Form.Group>
-                                <Form.Label>Orden #{numberOrder}</Form.Label>
+                                <Form.Label>Orden #{numberSale}</Form.Label>
                             </Form.Group>
                             <Form.Group>
                                 <Form.Label>Fecha: {date.split(' ')[0]}</Form.Label>{' '}
@@ -156,7 +219,7 @@ const MakePurchase = (props) => {
                                     <Col>
                                         <Form.Control as="select" className="inputMake" id="productAdd" onChange={onChangeFields}>
                                             <option>Articulo</option>
-                                            {props.listProducts.map((product) => (
+                                            {listProducts.map((product) => (
                                                 <option>{product.descripcion}</option>
                                             ))}
                                         </Form.Control>
@@ -168,7 +231,8 @@ const MakePurchase = (props) => {
                                 <Row>
                                     <Col>
                                         <Form.Group>
-                                            <Form.Label id="existAdd">Existencia: {existenceProduct}</Form.Label>
+                                            <Form.Label id="existAdd">Existencia: {existenceProduct}</Form.Label>{' \n'}
+                                            <Form.Label id="existAdd">Precio: {priceProduct}</Form.Label>
                                         </Form.Group>
                                     </Col>
                                     <Col></Col>
@@ -221,8 +285,7 @@ const MakePurchase = (props) => {
 
                         </Table>
 
-                        <Button className="buttonMake">Finalizar</Button>
-
+                        <Button className="buttonMake" onClick={sendSale}>Finalizar</Button>
                     </div></Col>
                 </Row>
             </Container>

@@ -3,27 +3,17 @@ import Header from '../components/base/Header'
 import Footer from '../components/base/Footer'
 import { Container,Row,Col,Button} from 'react-bootstrap';
 import MakePurchase from '../components/MakePurchase'
-import '../styles/Home.css'
+import ShowSales from '../components/ShowSales';
+import '../styles/Home.css';
 
 
 
 const Home = () => {
-    const[listProducts,setListProducts] = useState([]);
-
+    const[option,setOption] = useState(0);
     useEffect(() => {
-        convertProductsJson();
+       
     }, []);
 
-
-    async function convertProductsJson(){
-        await fetch('http://localhost:8085/api/getProducts',{method:'GET',mode:'cors'})
-        .then(response=>{
-            return response.json();
-        }).then(response=>{
-            setListProducts(Object.values(response));
-        })
-    }
-    
 
     return (
         <div className="home" >
@@ -32,15 +22,15 @@ const Home = () => {
             <Container className="text-center mt-2 mx-auto my-1 p-5 bosy">
                 <Row>
                     <Col></Col>
-                    <Col><Button className="buttonHome">Realizar compra</Button>{' '}</Col>
-                    <Col><Button className="buttonHome">Total compras</Button>{' '}</Col>
+                    <Col><Button className="buttonHome" onClick={()=>{setOption(1)}}>Realizar compra</Button>{' '}</Col>
+                    <Col><Button className="buttonHome"onClick={()=>{setOption(2)}}>Total compras</Button>{' '}</Col>
                     <Col></Col>
                 </Row>
                 <Row>
                     <Col>
-                    <MakePurchase listProducts={listProducts} />
+                    {option===0?<h1>Home</h1>:option===1?<MakePurchase/>:<ShowSales/>
+                    }
                     </Col>
-                
                 </Row>
             </Container>
             
