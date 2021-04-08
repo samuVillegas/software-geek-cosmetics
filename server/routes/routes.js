@@ -4,7 +4,8 @@ const {
     getMain,
     getProducts,
     createSale,
-    getSales
+    getSales,
+    saveProducts
 } = require('../controller/controller');
 
 /**
@@ -73,6 +74,7 @@ const {
  *              Description: Foam
  *              Price: 17000
  *              Existence: 1000
+ *  
  *                     
  *      
  *                
@@ -80,6 +82,20 @@ const {
 
 router.get('/', getMain);
 
+/**
+ * @swagger
+ * /saveProducts:
+ *  get:
+ *      summary: Save the products stored in the JSON in DB
+ *      tags: [Product]
+ *      responses:
+ *          265:
+ *              description: Products stored correctly    
+ *          255:
+ *              description: Server error
+ * 
+ */
+router.get('/saveProducts',saveProducts);
 
 
 /**
@@ -90,7 +106,7 @@ router.get('/', getMain);
  *      tags: [Product]
  *      responses:
  *          275:
- *              description: A JSON with the products and their respective values
+ *              description: A JSON is returned with the products and their respective values in propierty (message)
  *              content:
  *                  application/json:
  *                          schema: 

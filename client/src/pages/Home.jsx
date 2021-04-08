@@ -11,10 +11,18 @@ import '../styles/Home.css';
 const Home = () => {
     const[option,setOption] = useState(0);
     useEffect(() => {
-       
+       saveProducts();
     }, []);
 
-
+    const saveProducts = async()=>{
+        await fetch('http://localhost:8085/api/saveProducts',{method:'GET',mode:'cors'})
+        .then(response=>{
+            return response.json();
+        }).then(response=>{
+            if(response.message!=='PRODUCTS_STORED_CORRECTLY')  alert('SERVER_ERROR');
+        })
+    }
+    
     return (
         <div className="home" >
             <Header/>

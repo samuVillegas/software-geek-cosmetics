@@ -171,7 +171,7 @@ const MakePurchase = () => {
             .then(response=>{
                 return response.json();
             }).then(response=>{
-                if(response.message==='SUCCESSFUL_CREATION_ORDER'){
+                if(response.message==='SUCCESSFUL_CREATION_SALE'){
                     alert('SUCCESSFUL_CREATION_ORDER');
                     resetForm();
                 }

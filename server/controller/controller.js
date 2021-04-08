@@ -11,6 +11,27 @@ module.exports = {
             return res.status(255).json({message:'SERVER_ERROR' });
         }
     },
+    saveProducts: (req,res)=>{
+        try{
+            const result = cnn_mysql.execute('DELETE FROM Product',function(err,rows){
+                if(err) return res.status(255).json({message:'SERVER_ERROR' });
+                else{
+                    var query = 'INSERT INTO Product (Description,Price,Existence) VALUES'
+                    const products = Object.values(info_prueba);
+                    for(let i = 0; i<products.length; i++){
+                        query+=`('${products[i].descripcion}',${products[i].precio},${products[i].existencia}),`;
+                    }
+                    query = query.slice(0,-1);
+                    cnn_mysql.query(query,function(err,rows){
+                        if(err) return res.status(255).json({message:'SERVER_ERROR' });
+                        else return res.status(265).json({message:'PRODUCTS_STORED_CORRECTLY'});
+                    })
+                }
+            });
+        }catch(e){
+            return res.status(255).json({message:'SERVER_ERROR' });
+        }
+    },
     createSale:(req,res)=>{
         try{
             const {NumberSale,SubTotal,TotalIVA,CreationDate,NameUser,Total} = req.body;
@@ -18,7 +39,7 @@ module.exports = {
 
             cnn_mysql.query(`INSERT INTO Sale VALUES(${NumberSale},${SubTotal},${TotalIVA},${CreationDate},'${NameUser}',${Total}); `, function(err,rows){
                 if(err)return res.status(255).json({message:err});
-                else if(rows) return res.status(265).json({message:'SUCCESSFUL_CREATION_ORDER'}); 
+                else if(rows) return res.status(265).json({message:'SUCCESSFUL_CREATION_SALE'}); 
             })
         }catch(e){
             return res.status(255).json({message:'SERVER_ERROR'});
