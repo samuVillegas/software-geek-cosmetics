@@ -174,8 +174,7 @@ const MakePurchase = () => {
                 if(response.message==='SUCCESSFUL_CREATION_SALE'){
                     alert('SUCCESSFUL_CREATION_ORDER');
                     resetForm();
-                }
-                else if(response==='SERVER_ERROR')alert('SERVER_ERROR')
+                }else if(response.message==='SERVER_ERROR')alert('SERVER_ERROR')
             })
         }else{
             alert('Ingrese almenos un producto')

@@ -1,0 +1,19 @@
+version: "3"
+
+services: 
+    frontend-cosmetics:
+        image: frontend-cosmetics
+        stdin_open: true
+        ports: 
+            - "3000:3000"
+        networks: 
+            - net-app
+    backend-cosmetics:
+        image: backend-cosmetics
+        ports: 
+            - "8085:8085"
+        networks: 
+            - net-app
+networks: 
+    net-app: 
+        driver: bridge

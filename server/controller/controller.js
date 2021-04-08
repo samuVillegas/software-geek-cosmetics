@@ -1,5 +1,5 @@
 const { cnn_mysql } = require('../config/db.js')
-const info_prueba = require('../../Data/info_prueba.json'); 
+const info_prueba = require('../Data/info_prueba.json'); 
 module.exports = {
     getMain:(req,res)=>{
         res.send('<h1>Hola mundo</h1>');
@@ -35,7 +35,7 @@ module.exports = {
     createSale:(req,res)=>{
         try{
             const {NumberSale,SubTotal,TotalIVA,CreationDate,NameUser,Total} = req.body;
-            cnn_mysql.query(`INSERT INTO Sale VALUES(${NumberSale},${SubTotal},${TotalIVA},${CreationDate},'${NameUser}',${Total}); `, function(err,rows){
+            cnn_mysql.query(`INSERT INTO Sale VALUES(${NumberSale},${SubTotal},${TotalIVA},${Total},${CreationDate},'${NameUser}'); `, function(err,rows){
                 if(err)return res.status(255).json({message:err});
                 else if(rows) return res.status(265).json({message:'SUCCESSFUL_CREATION_SALE'}); 
             })
