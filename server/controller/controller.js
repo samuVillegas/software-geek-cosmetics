@@ -35,8 +35,6 @@ module.exports = {
     createSale:(req,res)=>{
         try{
             const {NumberSale,SubTotal,TotalIVA,CreationDate,NameUser,Total} = req.body;
-            console.log(req.body.NumberSale);
-
             cnn_mysql.query(`INSERT INTO Sale VALUES(${NumberSale},${SubTotal},${TotalIVA},${CreationDate},'${NameUser}',${Total}); `, function(err,rows){
                 if(err)return res.status(255).json({message:err});
                 else if(rows) return res.status(265).json({message:'SUCCESSFUL_CREATION_SALE'}); 
